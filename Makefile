@@ -8,7 +8,7 @@ clean: ## Clean workspace and containers
 	find . -name *.pyc -delete
 	CKAN_VERSION=$(CKAN_VERSION) docker-compose -f $(COMPOSE_FILE) down -v --remove-orphans
 
-lint: ## Lint the code (python 3 only)
+lint: ## Lint the code
 	docker-compose -f $(COMPOSE_FILE) run --rm app flake8 ckanext --count --show-source --statistics --exclude ckan
 
 test: ## Run extension tests
