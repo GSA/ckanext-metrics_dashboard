@@ -1,2 +1,3 @@
-# ckanext-metrics-dashboard
+# ckanext-metrics_dashboard
+
 A CKAN extension to display metrics about datasets
