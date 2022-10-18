@@ -4,6 +4,7 @@ from ckan.tests.helpers import CKANTestApp, CKANTestClient
 
 from ckan.tests import factories
 
+# Minimum config required for basic app
 config["testing"] = True
 config['__file__'] = '/srv/app/test.ini'
 config['SECRET_KEY'] = 'asdf'
@@ -11,16 +12,20 @@ config['here'] = config['__file__']
 config['who.config_file'] = '/srv/app/who.ini'
 config['beaker.session.secret'] = 'asdf'
 
+# Create app
 app = ckan.config.middleware.make_app(config)
 
-print(app._wsgi_app)
-print(type(app._wsgi_app))
-print(dir(app._wsgi_app))
+# Without the app context, db operations won't work
 with app._wsgi_app.app_context():
+    # Create user
     user = factories.Sysadmin(name='asdfs')
     user_name = user['name'].encode('ascii')
+
+    # Create organization
     organization = factories.Organization(name='myorg',
                                           users=[{'name': user_name, 'capacity': 'Admin'}])
+
+    # Create datasets
     dataset = {
             'public_access_level': 'public',
             'unique_id': '',
