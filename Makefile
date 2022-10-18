@@ -15,7 +15,7 @@ test: ## Run extension tests
 	CKAN_VERSION=$(CKAN_VERSION) docker-compose -f $(COMPOSE_FILE) run --rm app ./test.sh
 
 up: ## Start the containers
-	CKAN_VERSION=$(CKAN_VERSION) docker-compose -f $(COMPOSE_FILE) up
+	CKAN_VERSION=$(CKAN_VERSION) docker-compose -f $(COMPOSE_FILE) up app
 
 upd: ## Start the containers in the background
 	CKAN_VERSION=$(CKAN_VERSION) docker-compose -f $(COMPOSE_FILE) run --rm app ckan search-index rebuild -i -o -e
