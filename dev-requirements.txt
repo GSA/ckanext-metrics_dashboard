@@ -1,0 +1,7 @@
+factory-boy
+mock
+flake8
+pycodestyle
+pytest
+pytest-ckan
+pytest-cov
