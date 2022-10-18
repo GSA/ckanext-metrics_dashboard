@@ -27,6 +27,7 @@ services:
       - ./test.sh:/srv/app/test.sh
       - ./test.ini:/srv/app/test.ini
       - ./setup.py:/srv/app/setup.py
+      - ./seed.py:/srv/app/seed.py
       - /etc/timezone:/etc/timezone:ro
   db:
     image: ckan/ckan-postgres-dev:${CKAN_VERSION}
