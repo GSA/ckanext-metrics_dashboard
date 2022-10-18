@@ -1,7 +1,7 @@
 import pytest
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'metrics_dashboard')
+@pytest.mark.ckan_config('ckan.plugins', 'metrics_dashboard report')
 @pytest.mark.use_fixtures('with_plugins', 'clean_db')
 class TestMetricsDashboard():
     def test_metrics_base_url(self, app):

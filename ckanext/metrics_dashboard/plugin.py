@@ -1,6 +1,7 @@
 import logging
 
 import ckan.plugins as p
+from ckan.plugins import toolkit
 
 from . import blueprint
 
