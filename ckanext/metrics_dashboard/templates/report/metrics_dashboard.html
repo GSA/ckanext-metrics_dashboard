@@ -8,19 +8,32 @@ data - other data values, as a dict
 {% set ckan_29_or_higher = h.ckan_version().split('.')[1] | int >= 9 %}
 {% set dataset_read_route = 'dataset.read' if ckan_29_or_higher else 'dataset_read' %}
 <ul>
-    <li>Datasets without tags: {{ table|length }} / {{ data['num_packages'] }} ({{ data['packages_without_tags_percent']
-        }})</li>
-    <li>Average tags per package: {{ data['average_tags_per_package'] }} tags</li>
+    <li>Total Datasets: {{ data['total_datasets'] }}</li>
 </ul>
 
 <table class="table table-bordered table-condensed" id="report-table"
     style="width: 100%; table-layout:fixed; margin-top: 8px;">
     <thead>
         <tr>
-            <th>Dataset</th>
-            <th>Notes</th>
-            <th>User</th>
+            <th colspan="7">Harvest Source info</th>
+            <th colspan="8">Last Job</th>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <th>Id</th>
+            <th>Metadata Created</th>
+            <th>Metadata Modified</th>
+            <th>Organization Name</th>
+            <th>Job Count</th>
+            <th>Total Datasets</th>
             <th>Created</th>
+            <th>Status</th>
+            <th>Added</th>
+            <th>Updated</th>
+            <th>Not Modified</th>
+            <th>Errored</th>
+            <th>Deleted</th>
+            <th>Order Error Summary</th>
         </tr>
     </thead>
     <tbody>
@@ -28,12 +41,23 @@ data - other data values, as a dict
         <tr>
             <td>
                 <a href="{{ h.url_for(dataset_read_route, id=row.name) }}">
-                    {{ row.title }}
+                    {{ row.name }}
                 </a>
             </td>
-            <td>{{ row.notes }}</td>
-            <td>{{ h.linked_user(row.user) }}</td>
-            <td>{{ h.render_datetime(row.created) }}</td>
+            <td>{{ row.id }}</td>
+            <td>{{ h.render_datetime(row.metadata_created) }}</td>
+            <td>{{ h.render_datetime(row.metadata_modified) }}</td>
+            <td>{{ row.organization_name }}</td>
+            <td>{{ row.job_count }}</td>
+            <td>{{ row.total_datasets }}</td>
+            <td>{{ h.render_datetime(row.last_job_created) }}</td>
+            <td>{{ row.last_job_status }}</td>
+            <td>{{ row.last_job_added }}</td>
+            <td>{{ row.last_job_updated }}</td>
+            <td>{{ row.last_job_not_modified }}</td>
+            <td>{{ row.last_job_errored }}</td>
+            <td>{{ row.last_job_deleted }}</td>
+            <td>{{ row.last_job_order_error_summary }}</td>
         </tr>
         {% endfor %}
     </tbody>

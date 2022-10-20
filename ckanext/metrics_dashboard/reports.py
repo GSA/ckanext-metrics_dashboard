@@ -1,15 +1,20 @@
 import copy
+import logging
 try:
     from collections import OrderedDict  # from python 2.7
 except ImportError:
     from sqlalchemy.util import OrderedDict
 
 import ckan.model as model
-
+import ckanext.harvest.model as harvest_model
+import ckan.plugins as p
 from ckanext.report import lib
+
+log = logging.getLogger(__name__)
 
 
 def metrics_dashboard(organization, include_sub_organizations=False):
+    print('>>>> metrics_dashboard')
     if organization is None:
         return metrics_dashboard_index(include_sub_organizations=include_sub_organizations)
     else:
@@ -17,41 +22,87 @@ def metrics_dashboard(organization, include_sub_organizations=False):
 
 
 def metrics_dashboard_index(include_sub_organizations=False):
-    orgs = model.Session.query(model.Group)\
-        .filter(model.Group.type == 'organization')\
-        .filter(model.Group.state == 'active').all()
-    print(orgs)
+    print('>>>>>> metrics_dashboard_index')
+    results = []
+    total_datasets = 0
+    harvest_sources = model.Session.query(harvest_model.HarvestSource).all()
+    for source in harvest_sources:
+        id = source.id
+        context = {
+            "model": model,
+            "session": model.Session
+        }
+        source = p.toolkit.get_action("harvest_source_show")(
+            context, {"id": id}
+        )
+        row_data = OrderedDict((
+            ('name', source['name']),
+            ('id', source['id']),
+            ('metadata_created', source['metadata_created']),
+            ('metadata_modified', source['metadata_modified']),
+            ('organization_name', source['organization']['name']),
+            ('job_count', source['status']['job_count']),
+            ('total_datasets', source['status']['total_datasets']),
+            ('last_job_created', source['status']['last_job']['created']),
+            ('last_job_status', source['status']['last_job']['status']),
+            ('last_job_added', source['status']['last_job']['stats']['added']),
+            ('last_job_updated', source['status']['last_job']['stats']['updated']),
+            ('last_job_not_modified', source['status']['last_job']['stats']['not modified']),
+            ('last_job_errored', source['status']['last_job']['stats']['errored']),
+            ('last_job_deleted', source['status']['last_job']['stats']['deleted']),
+            ('last_job_order_error_summary', source['status']['last_job']['object_error_summary']),
+        ))
+        results.append(row_data)
+        total_datasets += source['status']['total_datasets']
+
     return {
-        'table': [
-            {'name': 'river-levels', 'title': 'River levels', 'notes': 'Harvested',
-                'user': 'bob', 'created': '2008-06-13T10:24:59.435631'},
-            {'name': 'co2-monthly', 'title': 'CO2 monthly', 'notes': '', 'user': 'bob', 'created': '2009-12-14T08:42:45.473827'},
-        ],
-        'num_packages': 56,
-        'packages_without_tags_percent': 4,
-        'average_tags_per_package': 3.5,
-    }
-    return {
-        'table': data,
-        'num_broken_packages': num_broken_packages,
-        'num_broken_resources': num_broken_resources,
-        'num_packages': num_packages,
-        'num_resources': num_resources,
-        'broken_package_percent': lib.percent(num_broken_packages, num_packages),
-        'broken_resource_percent': lib.percent(num_broken_resources, num_resources),
+        'table': results,
+        'total_datasets': total_datasets,
     }
 
 
 def metrics_dashboard_for_organization(organization, include_sub_organizations=False):
+    results = []
+    total_datasets = 0
+    harvest_sources = model.Session.query(harvest_model.HarvestSource).all()
+    for source in harvest_sources:
+        id = source.id
+        context = {
+            "model": model,
+            "session": model.Session
+        }
+        source = p.toolkit.get_action("harvest_source_show")(
+            context, {"id": id}
+        )
+        row_data = OrderedDict((
+            ('name', source['name']),
+            ('id', source['id']),
+            ('metadata_created', source['metadata_created']),
+            ('metadata_modified', source['metadata_modified']),
+            ('organization_name', source['organization']['name']),
+            ('job_count', source['status']['job_count']),
+            ('total_datasets', source['status']['total_datasets']),
+            ('last_job_created', source['status']['last_job']['created']),
+            ('last_job_status', source['status']['last_job']['status']),
+            ('last_job_added', source['status']['last_job']['stats']['added']),
+            ('last_job_updated', source['status']['last_job']['stats']['updated']),
+            ('last_job_not_modified', source['status']['last_job']['stats']['not modified']),
+            ('last_job_errored', source['status']['last_job']['stats']['errored']),
+            ('last_job_deleted', source['status']['last_job']['stats']['deleted']),
+            ('last_job_order_error_summary', source['status']['last_job']['object_error_summary']),
+        ))
+        results.append(row_data)
+        total_datasets += source['status']['total_datasets']
+        # import ipdb
+        # ipdb.set_trace()
+
+    print('>>>>>> metrics_dashboard_for_organization')
+    import ipdb
+    ipdb.set_trace()
+
     return {
-        'table': [
-            {'name': 'river-levels', 'title': 'River levels', 'notes': 'Harvested',
-                'user': 'bob', 'created': '2008-06-13T10:24:59.435631'},
-            {'name': 'co2-monthly', 'title': 'CO2 monthly', 'notes': '', 'user': 'bob', 'created': '2009-12-14T08:42:45.473827'},
-        ],
-        'num_packages': 102,
-        'packages_without_tags_percent': 4,
-        'average_tags_per_package': 3.5,
+        'table': results,
+        'total_datasets': total_datasets,
     }
 
     return {

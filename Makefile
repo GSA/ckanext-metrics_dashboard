@@ -17,6 +17,9 @@ test: ## Run extension tests
 up: ## Start the containers
 	CKAN_VERSION=$(CKAN_VERSION) docker-compose -f $(COMPOSE_FILE) up app
 
+debug: ## Start the containers
+	CKAN_VERSION=$(CKAN_VERSION) docker-compose -f $(COMPOSE_FILE) run -p 5000:5000 -v ./ckanext:/srv/app/ckanext -v ./test.sh:/srv/app/test.sh -v ./test.ini:/srv/app/test.ini -v ./setup.py:/srv/app/setup.py -v ./docker-entrypoint.d/:/docker-entrypoint.d/ -v ./seed.py:/srv/app/seed.py -v /etc/timezone:/etc/timezone:ro --rm app bash
+
 upd: ## Start the containers in the background
 	CKAN_VERSION=$(CKAN_VERSION) docker-compose -f $(COMPOSE_FILE) run --rm app ckan search-index rebuild -i -o -e
 	CKAN_VERSION=$(CKAN_VERSION) docker-compose -f $(COMPOSE_FILE) up -d

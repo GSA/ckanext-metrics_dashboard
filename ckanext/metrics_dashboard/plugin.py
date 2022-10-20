@@ -27,6 +27,7 @@ class MetricsDashboard(p.SingletonPlugin, p.toolkit.DefaultDatasetForm):
 
     def register_reports(self):
         """Register details of an extension's reports"""
+        print('>>>>> register reports')
         from ckanext.metrics_dashboard import reports
         return [reports.metrics_dashboard_report_info,
                 ]

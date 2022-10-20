@@ -1,1 +1,10 @@
 -e git+https://github.com/ckan/ckanext-report.git@master#egg=ckanext-report
+-e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest
+
+ckanext-datagovtheme
+ckanext-datajson>=0.1.5
+
+# ckan harvest dependencies
+ckantoolkit>=0.0.7
+pika>=1.1.0
+pyOpenSSL==20.0.1
