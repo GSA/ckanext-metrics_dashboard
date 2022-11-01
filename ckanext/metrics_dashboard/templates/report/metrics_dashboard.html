@@ -20,79 +20,37 @@ data - other data values, as a dict
         overflow:scroll;
         margin-top: 8px;
     }
+    p.info {
+        font-style: italic;
+    }
 </style>
 {% if c.options['organization'] == None %}
-    <ul>
-        <li>Results by Org</li>
-    </ul>
-    {% for org,results in data['table_data_by_org'].items() %}
-        <h2>
-            <a href="{{ h.url_for('/organization/' + org) }}">
-                {{ data['table_data_by_org'][org]['organization_title'] }}
-            </a>
-        </h2>
-        <ul>
-            <li>Total datasets: {{ data['table_data_by_org'][org]['total_datasets'] }}</li>
-            <li>Harvest Sources: {{ data['table_data_by_org'][org]['harvest_sources'] }}</li>
-        </ul>
-        {% for row in results['packages'] %}
-        <div class="table-wrapper">
-            <table class="table table-bordered table-condensed" id="report-table">
-                <thead>
-                    <tr>
-                        <th colspan="7">Harvest Source info</th>
-                        <th colspan="8">Last Job</th>
-                    </tr>
-                    <tr>
-                        <th>Name</th>
-                        <th>Created</th>
-                        <th>Type</th>
-                        <th>State</th>
-                        <th>Frequency</th>
-                        <th>Job Count</th>
-                        <th>Total Datasets</th>
-                        <th>Created</th>
-                        <th>Finished</th>
-                        <th>Status</th>
-                        <th>Added</th>
-                        <th>Updated</th>
-                        <th>Not Modified</th>
-                        <th>Errored</th>
-                        <th>Deleted</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <a href="{{ h.url_for(dataset_read_route, id=row.name) }}">
-                                {{ row.name }}
-                            </a>
-                        </td>
-                        <td>{{ h.render_datetime(row.metadata_created) }}</td>
-                        <td>{{ row.source_type }}</td>
-                        <td>{{ row.state }}</td>
-                        <td>{{ row.frequency }}</td>
-                        <td>{{ row.job_count }}</td>
-                        <td>{{ row.total_datasets }}</td>
-                        <td>{{ h.render_datetime(row.last_job_created) }}</td>
-                        <td>{{ h.render_datetime(row.last_job_finished) }}</td>
-                        <td>{{ row.last_job_status }}</td>
-                        <td>{{ row.last_job_added }}</td>
-                        <td>{{ row.last_job_updated }}</td>
-                        <td>{{ row.last_job_not_modified }}</td>
-                        <td>{{ row.last_job_errored }}</td>
-                        <td>{{ row.last_job_deleted }}</td>
-                    </tr>
-        
-                </tbody>
-            </table>
-        </div>
-        {% endfor %}
-    {% endfor %}
+    <p class="info">Click on an organization name to view detailed information about that organization.</p>
+    <div class="table-wrapper">
+        <table class="table table-bordered table-condensed" id="report-table">
+            <thead>
+                <tr>
+                    <th>Organization Name</th>
+                    <th>Harvest Sources</th>
+                    <th>Datasets</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for org,results in data['table_data_by_org'].items() %}
+                <tr>
+                    <td>
+                        <a href="{{ h.url_for('/report/metrics-dashboard/' + org) }}">
+                            {{ data['table_data_by_org'][org]['organization_title'] }}
+                        </a>
+                    </td>
+                    <td>{{ data['table_data_by_org'][org]['harvest_sources'] }}</td>
+                    <td>{{ data['table_data_by_org'][org]['total_datasets'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% else %}
-    <ul>
-        <li>Results by Org</li>
-    </ul>
     {% for org,results in data['table_data_by_org'].items() %}
         <h2>
             <a href="{{ h.url_for('/organization/' + org) }}">
@@ -100,61 +58,56 @@ data - other data values, as a dict
             </a>
         </h2>
         <ul>
-            <li>Total datasets: {{ data['table_data_by_org'][org]['total_datasets'] }}</li>
             <li>Harvest Sources: {{ data['table_data_by_org'][org]['harvest_sources'] }}</li>
+            <li>Total datasets: {{ data['table_data_by_org'][org]['total_datasets'] }}</li>
         </ul>
-        {% for row in results['packages'] %}
         <div class="table-wrapper">
             <table class="table table-bordered table-condensed" id="report-table">
                 <thead>
                     <tr>
-                        <th colspan="7">Harvest Source info</th>
-                        <th colspan="8">Last Job</th>
+                        <th colspan="6">Harvest Source info</th>
+                        <th colspan="7">Last Job</th>
                     </tr>
-                    <tr>
-                        <th>Name</th>
-                        <th>Created</th>
-                        <th>Type</th>
-                        <th>State</th>
-                        <th>Frequency</th>
-                        <th>Job Count</th>
-                        <th>Total Datasets</th>
-                        <th>Created</th>
-                        <th>Finished</th>
-                        <th>Status</th>
-                        <th>Added</th>
-                        <th>Updated</th>
-                        <th>Not Modified</th>
-                        <th>Errored</th>
-                        <th>Deleted</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <a href="{{ h.url_for(dataset_read_route, id=row.name) }}">
-                                {{ row.name }}
-                            </a>
-                        </td>
-                        <td>{{ h.render_datetime(row.metadata_created) }}</td>
-                        <td>{{ row.source_type }}</td>
-                        <td>{{ row.state }}</td>
-                        <td>{{ row.frequency }}</td>
-                        <td>{{ row.job_count }}</td>
-                        <td>{{ row.total_datasets }}</td>
-                        <td>{{ h.render_datetime(row.last_job_created) }}</td>
-                        <td>{{ h.render_datetime(row.last_job_finished) }}</td>
-                        <td>{{ row.last_job_status }}</td>
-                        <td>{{ row.last_job_added }}</td>
-                        <td>{{ row.last_job_updated }}</td>
-                        <td>{{ row.last_job_not_modified }}</td>
-                        <td>{{ row.last_job_errored }}</td>
-                        <td>{{ row.last_job_deleted }}</td>
-                    </tr>
-
-                </tbody>
+                        <tr>
+                            <th>Name</th>
+                            <th>Created</th>
+                            <th>Type</th>
+                            <th>Frequency</th>
+                            <th>Job Count</th>
+                            <th>Total Datasets</th>
+                            <th>Created</th>
+                            <th>Finished</th>
+                            <th>Added</th>
+                            <th>Updated</th>
+                            <th>Not Modified</th>
+                            <th>Errored</th>
+                            <th>Deleted</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in results['packages'] %}
+                        <tr>
+                            <td>
+                                <a href="{{ h.url_for(dataset_read_route, id=row.name) }}">
+                                    {{ row.name }}
+                                </a>
+                            </td>
+                            <td>{{ h.render_datetime(row.metadata_created) }}</td>
+                            <td>{{ row.source_type }}</td>
+                            <td>{{ row.frequency }}</td>
+                            <td>{{ row.job_count }}</td>
+                            <td>{{ row.total_datasets }}</td>
+                            <td>{{ h.render_datetime(row.last_job_created) }}</td>
+                            <td>{{ 'N/A' if (row.last_job_finished == None) else h.render_datetime(row.last_job_finished)}}</td>
+                            <td>{{ row.last_job_added }}</td>
+                            <td>{{ row.last_job_updated }}</td>
+                            <td>{{ row.last_job_not_modified }}</td>
+                            <td>{{ row.last_job_errored }}</td>
+                            <td>{{ row.last_job_deleted }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
             </table>
         </div>
-        {% endfor %}
     {% endfor %}
 {% endif %}

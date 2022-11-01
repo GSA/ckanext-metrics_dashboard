@@ -18,31 +18,40 @@ def metrics_dashboard(organization, include_sub_organizations=False):
 
 
 def metrics_dashboard_index(include_sub_organizations=False):
-    print('>>>>>> metrics_dashboard_index')
     return _get_harvest_results()
 
 
 def metrics_dashboard_for_organization(organization, include_sub_organizations=False):
-    print('>>>>>> metrics_dashboard_for_organization')
-    return _get_harvest_results()
+    return _get_harvest_results(organization)
 
 
 def _get_harvest_results(organization=None):
-    print('>>>>>> _get_harvest_results')
     table_data = []
     table_data_by_org = {}
 
-    harvest_sources = model.Session.query(harvest_model.HarvestSource).all()
+    context = {
+        "model": model,
+        "session": model.Session
+    }
 
-    # harvest_sources = model.Session.query(harvest_model.HarvestSource)\
-    #     .filter(id == organization).all()   ### TODO: add filter query by org
+    query = model.Session.query(harvest_model.HarvestSource)
 
-    for source in harvest_sources:
+    if organization:
+        # if passed an organization, we need to fetch the org id
+        org = p.toolkit.get_action("organization_show")(
+            context, {"id": organization}
+        )
+        # filter harvest source query by org id
+        query = query.join(
+            model.Package, harvest_model.HarvestSource.id == model.Package.id
+        ).filter(model.Package.owner_org == org['id']).all()
+
+    else:
+        # get all harvest sources
+        query = query.all()
+
+    for source in query:
         id = source.id
-        context = {
-            "model": model,
-            "session": model.Session
-        }
         source = p.toolkit.get_action("harvest_source_show")(
             context, {"id": id}
         )
@@ -73,17 +82,19 @@ def _get_harvest_results(organization=None):
         if (row_data['organization_name'] in table_data_by_org):
             table_data_by_org[row_data['organization_name']]['harvest_sources'] += 1
             table_data_by_org[row_data['organization_name']]['total_datasets'] += row_data['total_datasets']
-            table_data_by_org[row_data['organization_name']]['packages'].append(row_data)
+            # if we have an org, append the source data
+            if organization:
+                table_data_by_org[row_data['organization_name']]['packages'].append(row_data)
         else:
             table_data_by_org[row_data['organization_name']] = {
                 'organization_title': row_data['organization_title'],
                 'harvest_sources': 1,
                 'total_datasets': row_data['total_datasets'],
-                'packages': [row_data],
             }
+            # if we have an org, append the source data
+            if organization:
+                table_data_by_org[row_data['organization_name']]['packages'] = [row_data]
 
-    import ipdb
-    ipdb.set_trace()
     return {
         'table': table_data,  # needed for csv export
         'table_data_by_org': table_data_by_org
@@ -91,10 +102,7 @@ def _get_harvest_results(organization=None):
 
 
 def metrics_dashboard_option_combinations():
-    for organization in lib.all_organizations(include_none=True):
-        for include_sub_organizations in (False, True):
-            yield {'organization': organization,
-                   'include_sub_organizations': include_sub_organizations}
+    pass
 
 
 metrics_dashboard_report_info = {
