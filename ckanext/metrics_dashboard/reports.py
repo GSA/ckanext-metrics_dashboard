@@ -1,4 +1,3 @@
-import copy
 import logging
 from collections import OrderedDict, defaultdict
 
@@ -55,7 +54,6 @@ def _get_harvest_results(organization=None):
         source = p.toolkit.get_action("harvest_source_show")(
             context, {"id": id}
         )
-
         row_data = OrderedDict((
             ('name', source['name']),
             ('metadata_created', source['metadata_created']),
