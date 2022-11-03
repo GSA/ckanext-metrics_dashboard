@@ -1,7 +1,8 @@
 ---
 # https://github.com/ckan/ckanext-harvest/blob/3c83f41131c99042e7a44da858515c5563faba01/.github/workflows/test.yml
 name: Tests
-on: [pull_request]
+
+on: [pull_request]   # yamllint disable-line rule:truthy
 
 jobs:
   lint:
@@ -36,26 +37,37 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        options: >
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
       redis:
-          image: redis:3
+        image: redis:3
     env:
-      CKAN_SQLALCHEMY_URL: postgresql://ckan_default:pass@postgres/ckan_test
-      CKAN_DATASTORE_WRITE_URL: postgresql://datastore_write:pass@postgres/datastore_test
-      CKAN_DATASTORE_READ_URL: postgresql://datastore_read:pass@postgres/datastore_test
+      CKAN_SQLALCHEMY_URL:
+        postgresql://ckan_default:pass@postgres/ckan_test
+      CKAN_DATASTORE_WRITE_URL:
+        postgresql://datastore_write:pass@postgres/datastore_test
+      CKAN_DATASTORE_READ_URL:
+        postgresql://datastore_read:pass@postgres/datastore_test
       CKAN_SOLR_URL: http://solr:8983/solr/ckan
       CKAN_REDIS_URL: redis://redis:6379/1
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Install requirements
-      run: |
-        pip install -r requirements.txt -r dev-requirements.txt -e .
-    - name: Run tests
-      run: |
-        set -o pipefail
-        ckan -c test.ini db init
-        pytest --ckan-ini=test.ini --cov=ckanext.metrics_dashboard --disable-warnings ckanext/metrics_dashboard/tests | tee pytest-coverage.txt
-    - name: Report test coverage
-      if: ${{ always() }}
-      uses: coroo/pytest-coverage-commentator@v1.0.2
+      - uses: actions/checkout@v3
+      - name: Install requirements
+        run: |
+          pip install -r requirements.txt -r dev-requirements.txt -e .
+      - name: Run tests
+        run: >
+          set -o pipefail;
+          ckan -c test.ini db init;
+          pytest
+            --ckan-ini=test.ini
+            --cov=ckanext.metrics_dashboard
+            --disable-warnings ckanext/metrics_dashboard/tests
+          | tee pytest-coverage.txt
+      - name: Report test coverage
+        if: ${{ always() }}
+        uses: coroo/pytest-coverage-commentator@v1.0.2
