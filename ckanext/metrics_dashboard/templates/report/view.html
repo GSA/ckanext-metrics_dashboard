@@ -9,6 +9,11 @@
 {% endblock%}
 
 {% block primary_content_inner %}
+<style>
+    .report-container {
+        width: 100%;
+    }
+</style>
 <h1>{{ report.title }}</h1>
 <p>{{ report.description }}</p>
 <p>
@@ -39,7 +44,7 @@
 {% if not are_some_results %}
 <p>{{ _('No results found.') }}</p>
 {% else %}
-<div class="pull-left">
+<div class="pull-left report-container">
     {% snippet report_template, table=data['table'], data=data, report_name=report_name, options=options %}
 </div>
 {% endif %}

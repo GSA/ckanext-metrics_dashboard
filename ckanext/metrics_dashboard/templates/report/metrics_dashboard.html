@@ -8,9 +8,6 @@ data - other data values, as a dict
 {% set ckan_29_or_higher = h.ckan_version().split('.')[1] | int >= 9 %}
 {% set dataset_read_route = 'dataset.read' if ckan_29_or_higher else 'dataset_read' %}
 <style>
-    .pull-left {
-        width: 100%;
-    }
     .table-wrapper {
         overflow: auto;
         width: 100%;

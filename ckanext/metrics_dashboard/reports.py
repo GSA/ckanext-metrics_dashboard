@@ -106,7 +106,7 @@ def metrics_dashboard_option_combinations():
 metrics_dashboard_report_info = {
     'name': 'metrics-dashboard',
     'title': 'Metrics Dashboard',
-    'description': 'Description here.',
+    'description': 'A dashboard to report harvest source metrics by organization.',
     'option_defaults': OrderedDict((('organization', None),
                                     ('include_sub_organizations', False),
                                     )),
