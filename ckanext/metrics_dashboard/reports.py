@@ -1,10 +1,9 @@
 import logging
-from collections import OrderedDict, defaultdict
+from collections import OrderedDict
 
 import ckan.model as model
 import ckanext.harvest.model as harvest_model
 import ckan.plugins as p
-from ckanext.report import lib
 
 log = logging.getLogger(__name__)
 
@@ -13,7 +12,8 @@ def metrics_dashboard(organization, include_sub_organizations=False):
     if organization is None:
         return metrics_dashboard_index(include_sub_organizations=include_sub_organizations)
     else:
-        return metrics_dashboard_for_organization(organization=organization, include_sub_organizations=include_sub_organizations)
+        return metrics_dashboard_for_organization(organization=organization,
+                                                  include_sub_organizations=include_sub_organizations)
 
 
 def metrics_dashboard_index(include_sub_organizations=False):

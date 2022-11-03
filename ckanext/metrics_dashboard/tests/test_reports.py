@@ -1,9 +1,6 @@
 import pytest
 from unittest import TestCase
-import time
-import ckan.logic as logic
 import ckan.tests.factories as core_factories
-import ckanext.harvest.tests.factories as harvest_factories
 from ckan.plugins import toolkit
 import ckan.model as model
 from ckan.tests.helpers import reset_db
