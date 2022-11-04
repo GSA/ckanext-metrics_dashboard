@@ -14,4 +14,4 @@ while ! ckan  -c test.ini db init; do
     sleep 5
 done
 
-pytest --ckan-ini=test.ini --cov=ckanext.metrics_dashboard --disable-warnings ckanext/metrics_dashboard/tests
+pytest -s --ckan-ini=test.ini --cov=ckanext.metrics_dashboard --disable-warnings ckanext/metrics_dashboard/tests

@@ -1,6 +1,11 @@
+from webbrowser import get
+import sqlalchemy
+import sys
+import json
 import ckan.config.middleware
+from ckan import model
 from ckan.common import config
-from ckan.tests.helpers import CKANTestApp, CKANTestClient
+from ckan.tests.helpers import CKANTestApp
 
 from ckan.tests import factories
 
@@ -14,42 +19,49 @@ config['beaker.session.secret'] = 'asdf'
 
 # Create app
 app = ckan.config.middleware.make_app(config)
+test_app = CKANTestApp(app)
 
-# Without the app context, db operations won't work
-with app._wsgi_app.app_context():
-    # Create user
-    user = factories.Sysadmin(name='asdfs')
-    user_name = user['name'].encode('ascii')
+
+def get_base_dataset():
+    res = test_app.post('/api/action/organization_show', data={'id': 'myorg'})
+    org_id = json.loads(res.body)['result']['id']
+    # Create datasets
+    return {
+        'public_access_level': 'public',
+        'unique_id': '',
+        'contact_name': 'Jhon',
+        'program_code': '018:001',
+        'bureau_code': '019:20',
+        'contact_email': 'jhon@mail.com',
+        'publisher': 'Publicher 01',
+        'modified': '2019-01-27 11:41:21',
+        'tag_string': 'tag01,tag02',
+        'owner_org': org_id,
+    }
+
+
+# Without the request context, db operations won't work
+with test_app.flask_app.test_request_context():
+    try:
+        user = factories.Sysadmin(name='asdfs')
+        user_name = user['name'].encode('ascii')
+        print('User created')
+    except sqlalchemy.exc.IntegrityError:
+        print('User exists')
 
     # Create organization
-    organization = factories.Organization(name='myorg',
-                                          users=[{'name': user_name, 'capacity': 'Admin'}])
+    try:
+        organization = factories.Organization(name='myorg')
+        print('Org created')
+    except sqlalchemy.exc.InvalidRequestError:
+        print('Org exists')
 
     # Create datasets
-    dataset = {
-            'public_access_level': 'public',
-            'unique_id': '',
-            'contact_name': 'Jhon',
-            'program_code': '018:001',
-            'bureau_code': '019:20',
-            'contact_email': 'jhon@mail.com',
-            'publisher': 'Publicher 01',
-            'modified': '2019-01-27 11:41:21',
-            'tag_string': 'tag01,tag02',
-            'owner_org': organization['id'],
-        }
-    d1 = dataset.copy()
-    d1.update({'title': 'test 01 dataset', 'unique_id': 't1'})
-    dataset1 = factories.Dataset(**d1)
-    d2 = dataset.copy()
-    d2.update({'title': 'test 02 dataset', 'unique_id': 't2'})
-    dataset2 = factories.Dataset(**d2)
-    d3 = dataset.copy()
-    d3.update({'title': 'test 03 dataset', 'unique_id': 't3'})
-    dataset3 = factories.Dataset(**d3)
-    d4 = dataset.copy()
-    d4.update({'title': 'test 04 dataset', 'unique_id': 't4'})
-    dataset4 = factories.Dataset(**d4)
-    d5 = dataset.copy()
-    d5.update({'title': 'test 05 dataset', 'unique_id': 't5'})
-    dataset5 = factories.Dataset(**d5)
+    for x in range(1, 6):
+        try:
+            dataset = get_base_dataset()
+            dataset.update({'title': f"test 0{x} dataset", 'unique_id': f't{x}'})
+            factories.Dataset(**dataset)
+            print(f'Dataset {x} created')
+        except Exception as er:
+            print(f'Dataset {x} exists')

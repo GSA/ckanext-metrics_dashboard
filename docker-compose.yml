@@ -14,7 +14,7 @@ services:
       CKAN_SOLR_URL: http://solr:8983/solr/ckan
       CKAN_REDIS_URL: redis://redis:6379/
       CKAN_DATAPUSHER_URL: http://localhost:8080/  # datapusher is not really enabled
-      CKAN__PLUGINS: metrics_dashboard
+      CKAN__PLUGINS: metrics_dashboard report ckan_harvester datajson_harvest datagovtheme harvest
       PYTHONDONTWRITEBYTECODE: 1
     ports:
       - "5000:5000"
@@ -27,6 +27,7 @@ services:
       - ./test.sh:/srv/app/test.sh
       - ./test.ini:/srv/app/test.ini
       - ./setup.py:/srv/app/setup.py
+      - ./docker-entrypoint.d/:/docker-entrypoint.d/
       - ./seed.py:/srv/app/seed.py
       - /etc/timezone:/etc/timezone:ro
   db:
