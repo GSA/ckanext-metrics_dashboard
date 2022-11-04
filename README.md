@@ -79,7 +79,11 @@ Lint your code.
     $ make lint
 
 ### Debugging
-P
+
+We have not determined a good way for most IDE native debugging, however you can use the built in Python pdb debugger. Simply run `make debug`, which will run docker with an interactive shell. Add import pdb; pdb.set_trace() anywhere you want to start debugging, and if the code is triggered you should see a command prompt waiting in the shell. Use a pdb cheat sheet when starting to learn like this.
+
+When you edit/add/remove code, the server is smart enough to restart. If you are editing logic that is not part of the webserver (ckan command, etc) then you should be able to run the command after edits and get the same debugger prompt.
+
 1. Launch the containers with `make debug`
 2. Start the CKAN process by running `./start_ckan_development.sh`
 3. Add `import ibdb; ipdb.set_trace()` at the point you wish to debug.
