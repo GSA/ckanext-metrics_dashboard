@@ -1,6 +1,6 @@
 # ckanext-metrics_dashboard
 
-[![GitHub Actions](https://github.com/GSA/ckanext-metrics_dashboard/actions/workflows/publish.yml/badge.svg)](https://github.com/GSA/ckanext-metrics_dashboard/actions/workflows/publish.yml)
+[![GitHub Actions](https://github.com/GSA/ckanext-metrics_dashboard/actions/workflows/deploy.yml/badge.svg)](https://github.com/GSA/ckanext-metrics_dashboard/actions/workflows/publish.yml)
 [![PyPI version](https://badge.fury.io/py/ckanext-metrics_dashboard.svg)](https://badge.fury.io/py/ckanext-metrics_dashboard)
 
 A CKAN extension to display metrics about harvest sources.
