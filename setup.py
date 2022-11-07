@@ -23,7 +23,7 @@ setup(
     url='https://github.com/GSA/ckanext-metrics_dashboard/',
     license='Public Domain',
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
-    namespace_packages=['ckanext'],
+    namespace_packages=['ckanext', 'ckanext.metrics_dashboard'],
     include_package_data=True,
     zip_safe=False,
     install_requires=[
