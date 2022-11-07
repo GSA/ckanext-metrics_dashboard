@@ -51,7 +51,8 @@ data - other data values, as a dict
     {% for org,results in data['table_data_by_org'].items() %}
         <h2>
             <a href="{{ h.url_for('/organization/' + org) }}">
-                {{ data['table_data_by_org'][org]['organization_title'] }}
+                {{ data['table_data_by_org'][org]['organization_title'] if data['table_data_by_org'][org]['organization_title'] else org
+                }}
             </a>
         </h2>
         <ul>
