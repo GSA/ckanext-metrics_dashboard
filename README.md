@@ -8,15 +8,15 @@ A CKAN extension to display metrics about harvest sources.
 ## Features
 
 -   `${CKAN_URL}/report/metrics_dashboard`
--   -   A summary report of number of datasets and harvest sources for each organization
+-   -   Displays a summary report of number of datasets and harvest sources for each organization
 
 -   `${CKAN_URL}/report/metrics_dashboard/{org}`
--   -   A detailed report of each harvest source in an organization, where org is the ID of your organization
+-   -   Displays a detailed report of each harvest source in an organization, where org is the ID of your organization
 
--   Detailed CSV export of all harvest sources
--   JSON export of all tabular data in CSV plus a second property `table_data_by_org` that includes the same data grouped by organization
+-   CSV Export: A comprehensive table of all harvest sources
+-   JSON Export: CSV raw data plus a second key `table_data_by_org` that includes the same data grouped by organization
 
-Compatibility: Tested with CKAN 2.9, though it should work with earlier versions.
+Compatibility: Tested with CKAN 2.9, though it's expected to work with earlier versions compatible with ckanext-report.
 
 ## Usage
 
