@@ -120,10 +120,6 @@ def _get_harvest_results(organization=None):
     }
 
 
-def metrics_dashboard_option_combinations():
-    pass
-
-
 metrics_dashboard_report_info = {
     'name': 'metrics-dashboard',
     'title': 'Metrics Dashboard',
@@ -131,7 +127,7 @@ metrics_dashboard_report_info = {
     'option_defaults': OrderedDict((('organization', None),
                                     ('include_sub_organizations', False),
                                     )),
-    'option_combinations': metrics_dashboard_option_combinations,
+    'option_combinations': None,
     'generate': metrics_dashboard,
     'template': 'report/metrics_dashboard.html',
 }
