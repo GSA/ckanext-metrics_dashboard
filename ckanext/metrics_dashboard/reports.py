@@ -54,6 +54,10 @@ def _get_harvest_results(organization=None):
         source = p.toolkit.get_action("harvest_source_show")(
             context, {"id": id}
         )
+        if source['state'] == 'deleted':
+            continue
+            # TODO: process deleted datasets so a logged in user can see those as well
+
         last_job = source['status']['last_job']
         source_org = source['organization']
         if not last_job:
