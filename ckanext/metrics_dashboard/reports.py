@@ -54,25 +54,50 @@ def _get_harvest_results(organization=None):
         source = p.toolkit.get_action("harvest_source_show")(
             context, {"id": id}
         )
+        if source['state'] == 'deleted':
+            continue
+            # TODO: process deleted datasets so a logged in user can see those as well
+
+        last_job = source['status']['last_job']
+        source_org = source['organization']
+        if not last_job:
+            last_job = {
+                'created': 'N/A',
+                'finished': 'N/A',
+                'status': 'N/A',
+                'stats': {
+                    'added': 'N/A',
+                    'updated': 'N/A',
+                    'not modified': 'N/A',
+                    'errored': 'N/A',
+                    'deleted': 'N/A',
+                },
+                'object_error_summary': 'N/A',
+            }
+        if not source_org:
+            source_org = {
+                'name': 'N/A',
+                'title': 'N/A',
+            }
         row_data = OrderedDict((
             ('name', source['name']),
             ('metadata_created', source['metadata_created']),
             ('source_type', source['source_type']),
             ('state', source['state']),
             ('frequency', source['frequency']),
-            ('organization_name', source['organization']['name']),
-            ('organization_title', source['organization']['title']),
+            ('organization_name', source_org['name']),
+            ('organization_title', source_org['title']),
             ('job_count', source['status']['job_count']),
             ('total_datasets', source['status']['total_datasets']),
-            ('last_job_created', source['status']['last_job']['created']),
-            ('last_job_finished', source['status']['last_job']['finished']),
-            ('last_job_status', source['status']['last_job']['status']),
-            ('last_job_added', source['status']['last_job']['stats']['added']),
-            ('last_job_updated', source['status']['last_job']['stats']['updated']),
-            ('last_job_not_modified', source['status']['last_job']['stats']['not modified']),
-            ('last_job_errored', source['status']['last_job']['stats']['errored']),
-            ('last_job_deleted', source['status']['last_job']['stats']['deleted']),
-            ('object_error_summary', source['status']['last_job']['object_error_summary']),  # not yet implemented
+            ('last_job_created', last_job['created']),
+            ('last_job_finished', last_job['finished']),
+            ('last_job_status', last_job['status']),
+            ('last_job_added', last_job['stats']['added']),
+            ('last_job_updated', last_job['stats']['updated']),
+            ('last_job_not_modified', last_job['stats']['not modified']),
+            ('last_job_errored', last_job['stats']['errored']),
+            ('last_job_deleted', last_job['stats']['deleted']),
+            ('object_error_summary', last_job['object_error_summary']),  # not yet implemented
         ))
 
         table_data.append(row_data)  # needed for csv export
@@ -99,10 +124,6 @@ def _get_harvest_results(organization=None):
     }
 
 
-def metrics_dashboard_option_combinations():
-    pass
-
-
 metrics_dashboard_report_info = {
     'name': 'metrics-dashboard',
     'title': 'Metrics Dashboard',
@@ -110,7 +131,7 @@ metrics_dashboard_report_info = {
     'option_defaults': OrderedDict((('organization', None),
                                     ('include_sub_organizations', False),
                                     )),
-    'option_combinations': metrics_dashboard_option_combinations,
+    'option_combinations': None,
     'generate': metrics_dashboard,
     'template': 'report/metrics_dashboard.html',
 }
