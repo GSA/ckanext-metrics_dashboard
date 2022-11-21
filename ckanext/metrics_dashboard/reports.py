@@ -32,7 +32,9 @@ def _get_harvest_results(organization=None):
         "model": model,
         "session": model.Session
     }
-
+    return {
+        'table': []
+    }
     query = model.Session.query(harvest_model.HarvestSource)
 
     if organization:
