@@ -44,14 +44,14 @@ def _get_harvest_results(organization=None):
         # filter harvest source query by org id
         query = query.join(
             model.Package, harvest_model.HarvestSource.id == model.Package.id) \
-        .filter(model.Package.owner_org == org['id']) \
-        .filter(model.Package.state == 'active').all()
+            .filter(model.Package.owner_org == org['id']) \
+            .filter(model.Package.state == 'active').all()
 
     else:
         # get all harvest sources except those that are deleted
         query = query.join(
             model.Package, harvest_model.HarvestSource.id == model.Package.id) \
-        .filter(model.Package.state == 'active').all()
+            .filter(model.Package.state == 'active').all()
 
     for source in query:
         id = source.id
