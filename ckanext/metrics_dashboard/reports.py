@@ -8,7 +8,7 @@ import ckan.plugins as p
 log = logging.getLogger(__name__)
 
 
-def metrics_dashboard(organization, include_sub_organizations=False):
+def metrics_dashboard(organization=None, include_sub_organizations=False):
     if organization is None:
         return metrics_dashboard_index(include_sub_organizations=include_sub_organizations)
     else:
@@ -32,9 +32,7 @@ def _get_harvest_results(organization=None):
         "model": model,
         "session": model.Session
     }
-    return {
-        'table': []
-    }
+
     query = model.Session.query(harvest_model.HarvestSource)
 
     if organization:
