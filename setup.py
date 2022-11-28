@@ -7,11 +7,9 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
-version = '0.1.4'
-
 setup(
     name='ckanext-metrics_dashboard',
-    version=version,
+    version='0.1.5',
     description="A CKAN extension to display metrics about datasets.",
     long_description=long_description,
     classifiers=[
