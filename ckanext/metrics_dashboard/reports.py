@@ -4,6 +4,7 @@ from collections import OrderedDict
 import ckan.model as model
 import ckanext.harvest.model as harvest_model
 import ckan.plugins as p
+from ckanext.report import lib
 
 log = logging.getLogger(__name__)
 
@@ -42,21 +43,21 @@ def _get_harvest_results(organization=None):
         )
         # filter harvest source query by org id
         query = query.join(
-            model.Package, harvest_model.HarvestSource.id == model.Package.id
-        ).filter(model.Package.owner_org == org['id']).all()
+            model.Package, harvest_model.HarvestSource.id == model.Package.id) \
+            .filter(model.Package.owner_org == org['id']) \
+            .filter(model.Package.state == 'active').all()
 
     else:
-        # get all harvest sources
-        query = query.all()
+        # get all harvest sources except those that are deleted
+        query = query.join(
+            model.Package, harvest_model.HarvestSource.id == model.Package.id) \
+            .filter(model.Package.state == 'active').all()
 
     for source in query:
         id = source.id
         source = p.toolkit.get_action("harvest_source_show")(
             context, {"id": id}
         )
-        if source['state'] == 'deleted':
-            continue
-            # TODO: process deleted datasets so a logged in user can see those as well
 
         last_job = source['status']['last_job']
         source_org = source['organization']
@@ -124,6 +125,13 @@ def _get_harvest_results(organization=None):
     }
 
 
+def metrics_dashboard_option_combinations():
+    for organization in lib.all_organizations(include_none=True):
+        for include_sub_organizations in (False, True):
+            yield {'organization': organization,
+                   'include_sub_organizations': include_sub_organizations}
+
+
 metrics_dashboard_report_info = {
     'name': 'metrics-dashboard',
     'title': 'Metrics Dashboard',
@@ -131,7 +139,7 @@ metrics_dashboard_report_info = {
     'option_defaults': OrderedDict((('organization', None),
                                     ('include_sub_organizations', False),
                                     )),
-    'option_combinations': None,
+    'option_combinations': metrics_dashboard_option_combinations,
     'generate': metrics_dashboard,
     'template': 'report/metrics_dashboard.html',
 }
