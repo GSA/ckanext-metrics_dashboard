@@ -1,9 +1,6 @@
-from webbrowser import get
 import sqlalchemy
-import sys
 import json
 import ckan.config.middleware
-from ckan import model
 from ckan.common import config
 from ckan.tests.helpers import CKANTestApp
 
@@ -63,5 +60,5 @@ with test_app.flask_app.test_request_context():
             dataset.update({'title': f"test 0{x} dataset", 'unique_id': f't{x}'})
             factories.Dataset(**dataset)
             print(f'Dataset {x} created')
-        except Exception as er:
+        except Exception:
             print(f'Dataset {x} exists')
