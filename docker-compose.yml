@@ -31,7 +31,7 @@ services:
       - ./seed.py:/srv/app/seed.py
       - /etc/timezone:/etc/timezone:ro
   db:
-    image: ckan/ckan-postgres-dev:${CKAN_VERSION}
+    image: ckan/ckan-postgres-dev:2.9
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -44,4 +44,4 @@ services:
   redis:
     image: redis
   solr:
-    image: ckan/ckan-solr-dev:${CKAN_VERSION}
+    image: ckan/ckan-solr-dev:2.9
