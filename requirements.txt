@@ -1,7 +1,7 @@
 -e git+https://github.com/ckan/ckanext-report.git@master#egg=ckanext-report
 -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest
 
-ckanext-datagovtheme>=0.2.1
+ckanext-datagovtheme
 ckanext-datajson>=0.1.5
 
 # ckan harvest dependencies
