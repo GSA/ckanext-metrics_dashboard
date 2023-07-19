@@ -9,7 +9,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='ckanext-metrics_dashboard',
-    version='0.1.5',
+    version='0.2.0',
     description="A CKAN extension to display metrics about datasets.",
     long_description=long_description,
     classifiers=[
