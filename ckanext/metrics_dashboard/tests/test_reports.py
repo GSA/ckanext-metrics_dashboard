@@ -85,7 +85,7 @@ class TestMetricsDashboard():
         assert results['table_data_by_org'][organization['name']
                                             ]['total_datasets'] == 0
         assert results['table_data_by_org'][organization['name']
-                                            ]['organization_title'] == 'Test Organization'
+                                            ]['organization_title'] == organization['display_name']
 
         # test table data
         assert len(results['table']) == 1
@@ -95,7 +95,7 @@ class TestMetricsDashboard():
         assert table['state'] == 'active'
         assert table['frequency'] == 'MANUAL'
         assert table['organization_name'] == 'myorg'
-        assert table['organization_title'] == 'Test Organization'
+        assert table['organization_title'] == organization['display_name']
         assert table['job_count'] == 1
         assert table['total_datasets'] == 0
 
@@ -114,7 +114,7 @@ class TestMetricsDashboard():
         assert results['table_data_by_org'][organization['name']
                                             ]['total_datasets'] == 0
         assert results['table_data_by_org'][organization['name']
-                                            ]['organization_title'] == 'Test Organization'
+                                            ]['organization_title'] == organization['display_name']
 
         # assert that table_data_by_org contains same entry as table
         TestCase().assertDictEqual(results['table_data_by_org']['myorg']['packages'][0],
@@ -128,7 +128,7 @@ class TestMetricsDashboard():
         assert table['state'] == 'active'
         assert table['frequency'] == 'MANUAL'
         assert table['organization_name'] == 'myorg'
-        assert table['organization_title'] == 'Test Organization'
+        assert table['organization_title'] == organization['display_name']
         assert table['job_count'] == 1
         assert table['total_datasets'] == 0
 
@@ -147,7 +147,7 @@ class TestMetricsDashboard():
         assert results['table_data_by_org'][organization['name']
                                             ]['total_datasets'] == 0
         assert results['table_data_by_org'][organization['name']
-                                            ]['organization_title'] == 'Test Organization'
+                                            ]['organization_title'] == organization['display_name']
 
         # test table data
         assert len(results['table']) == 1
@@ -157,7 +157,7 @@ class TestMetricsDashboard():
         assert table['state'] == 'active'
         assert table['frequency'] == 'MANUAL'
         assert table['organization_name'] == 'myorg'
-        assert table['organization_title'] == 'Test Organization'
+        assert table['organization_title'] == organization['display_name']
         assert table['job_count'] == 0
         assert table['total_datasets'] == 0
         assert table['last_job_added'] == 'N/A'

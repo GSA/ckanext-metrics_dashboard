@@ -44,4 +44,4 @@ services:
   redis:
     image: redis
   solr:
-    image: ckan/ckan-solr-dev:${CKAN_VERSION}
+    image: ckan/ckan-solr-dev:2.9

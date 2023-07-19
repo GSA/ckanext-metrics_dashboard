@@ -16,7 +16,13 @@ A CKAN extension to display metrics about harvest sources.
 -   CSV Export: A comprehensive table of all harvest sources
 -   JSON Export: CSV raw data plus a second key `table_data_by_org` that includes the same data grouped by organization
 
-Compatibility: Tested with CKAN 2.9, though it's expected to work with earlier versions compatible with ckanext-report.
+This extension is compatible with these versions of CKAN.
+
+CKAN version | Compatibility
+------------ | -------------
+<=2.8        | ???
+2.9          | yes
+2.10         | yes
 
 ## Usage
 
