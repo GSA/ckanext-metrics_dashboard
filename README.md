@@ -21,8 +21,8 @@ This extension is compatible with these versions of CKAN.
 CKAN version | Compatibility
 ------------ | -------------
 <=2.8        | ???
-2.9          | yes
-2.10         | yes
+2.9          | yes (with ckanext-datagovtheme==0.1.*)
+2.10         | yes (with ckanext-datagovtheme>=0.2.1)
 
 ## Usage
 
