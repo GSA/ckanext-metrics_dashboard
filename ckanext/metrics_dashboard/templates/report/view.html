@@ -17,7 +17,7 @@
 <h1>{{ report.title }}</h1>
 <p>{{ report.description }}</p>
 <p>
-    {{ _('Generated') }}: {{ h.report__render_datetime(report_date, '%d/%m/%Y %H:%M') }}
+    {{ _('Generated') }}: {{ h.report__render_datetime(report_date, '%m/%d/%Y %H:%M') }}
 </p>
 {% if c.userobj.sysadmin %}
 <div class="panel panel-info" style="width=700px">
